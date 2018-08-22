@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <title>DB designer</title>
+
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css">
+  <script type="module" src="../src/menu_bar.js"></script>
+</head>
+
+<body>
+  <menu-bar></menu-bar>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('menu-bar').config = {
+        items: [
+          {
+            id: 'file',
+            title: 'File',
+            items: [
+              {
+                id: 'open',
+                title: 'Open'
+              },
+              {
+                id: 'save',
+                title: 'Save'
+              }
+            ]
+          },
+          {
+            id: 'help',
+            title: 'Help',
+            items: [
+              {
+                id: 'about',
+                title: 'About'
+              }
+            ]
+          }
+        ]
+      };
+    });
+  </script>
+</body>
+
+</html>

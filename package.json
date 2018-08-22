@@ -1,0 +1,21 @@
+{
+  "name": "db_designer_core",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "./node_modules/http-server/bin/http-server -p 9997"
+  },
+  "author": "",
+  "license": "GNU 3",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-google": "^0.9.1",
+    "http-server": "^0.11.1"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.0"
+  }
+}

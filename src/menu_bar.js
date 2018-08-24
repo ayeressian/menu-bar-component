@@ -28,34 +28,55 @@ class MenuBar extends HTMLElement {
     htmlPromise.then(html => {
       html = stringReplaceAll(html, '${base}', this._baseUrl);
       this._shadowDom.innerHTML = html;
+      this._dropDown = this._shadowDom.querySelector('.dropdown');
     });
+  }
+
+  _onClick(item, event) {
+    const viewportOffset = event.target.getBoundingClientRect();
+    this._dropDown.style.display = 'inline-block';
+    this._dropDown.style.top = viewportOffset.bottom + 'px';
+    this._dropDown.style.left = viewportOffset.left + 'px';
+
+    if (item.items != null) {
+      this._dropDown.innerHTML = '';
+      const ulElem = document.createElement('ul');
+      item.items.forEach(innerItem => {
+        const li = document.createElement('li');
+        li.innerHTML = innerItem.title;
+        li.addEventListener('click', this._onClickInner.bind(this, innerItem));
+        ulElem.appendChild(li);
+      });
+      this._dropDown.appendChild(ulElem);
+    }
+  }
+
+  _onClickInner(item, event) {
+    this.dispatchEvent(new CustomEvent('select', { detail: item.id }));
+    this._dropDown.style.display = 'none';
   }
 
   set config(config) {
-    htmlPromise.then(() => {      
+    htmlPromise.then(() => {
       config.items.forEach(item => {
         const li = document.createElement('li');
+        li.addEventListener('click', this._onClick.bind(this, item));
         li.innerHTML = item.title;
         const menuBar = this._shadowDom.querySelector('.menu_bar');
-        menuBar.appendChild(li);
+        menuBar.appendChild(li);        
 
-        if (item.items != null) {
-
-        }
+        this._shadowDom.addEventListener('click', (event) => {
+          if (event.target.nodeName !== 'LI') {
+            this._dropDown.style.display = 'none';
+          }          
+        });
+        document.addEventListener('click', (event) => {
+          if (event.target !== this) {
+            this._dropDown.style.display = 'none';
+          }
+        });
       });
     });
-  }
-
-  connectedCallback() {
-    console.log('Custom square element added to page.');
-  }
-
-  disconnectedCallback() {
-    console.log('Custom square element removed from page.');
-  }
-
-  adoptedCallback() {
-    console.log('Custom square element moved to new page.');
   }
 }
 

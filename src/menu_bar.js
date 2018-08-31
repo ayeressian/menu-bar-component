@@ -1,21 +1,18 @@
 function _getBaseUrl() {
   const current =
     import.meta.url;
-  var to = current.lastIndexOf('/');
+  const to = current.lastIndexOf('/');
   return current.substring(0, to);
 }
 
 function stringReplaceAll(str, find, replace) {
-  find = find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+  find = find.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
   return str.replace(new RegExp(find, 'g'), replace);
 }
 
 const baseUrl = _getBaseUrl();
 
-const htmlPromise = fetch(`${baseUrl}/template.html`).then((response) => response.text()).
-  catch((error) => {
-    console.error(error);
-  });
+const htmlPromise = fetch(`${baseUrl}/template.html`).then((response) => response.text());
 
 class MenuBar extends HTMLElement {
   constructor() {
@@ -25,7 +22,7 @@ class MenuBar extends HTMLElement {
       mode: 'closed'
     });
 
-    htmlPromise.then(html => {
+    htmlPromise.then((html) => {
       html = stringReplaceAll(html, '${base}', this._baseUrl);
       this._shadowDom.innerHTML = html;
       this._dropDown = this._shadowDom.querySelector('.dropdown');
@@ -41,7 +38,7 @@ class MenuBar extends HTMLElement {
     if (item.items != null) {
       this._dropDown.innerHTML = '';
       const ulElem = document.createElement('ul');
-      item.items.forEach(innerItem => {
+      item.items.forEach((innerItem) => {
         const li = document.createElement('li');
         li.innerHTML = innerItem.title;
         li.addEventListener('click', this._onClickInner.bind(this, innerItem));
@@ -58,17 +55,17 @@ class MenuBar extends HTMLElement {
 
   set config(config) {
     htmlPromise.then(() => {
-      config.items.forEach(item => {
+      config.items.forEach((item) => {
         const li = document.createElement('li');
         li.addEventListener('click', this._onClick.bind(this, item));
         li.innerHTML = item.title;
         const menuBar = this._shadowDom.querySelector('.menu_bar');
-        menuBar.appendChild(li);        
+        menuBar.appendChild(li);
 
         this._shadowDom.addEventListener('click', (event) => {
           if (event.target.nodeName !== 'LI') {
             this._dropDown.style.display = 'none';
-          }          
+          }
         });
         document.addEventListener('click', (event) => {
           if (event.target !== this) {

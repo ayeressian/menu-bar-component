@@ -1,12 +1,26 @@
 import template from './template.js';
 
+function getBaseUrl() {
+  const current =
+    import.meta.url;
+  const to = current.lastIndexOf('/');
+  return current.substring(0, to);
+}
+
+function stringReplaceAll(str, find, replace) {
+  find = find.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
 class MenuBar extends HTMLElement {
   constructor() {
     super();
+    this._baseUrl = getBaseUrl();
     this._shadowDom = this.attachShadow({
       mode: 'closed'
     });
-    this._shadowDom.innerHTML = template;
+    const html = stringReplaceAll(template, '$_{base}', this._baseUrl);
+    this._shadowDom.innerHTML = html;
     this._dropDown = this._shadowDom.querySelector('.dropdown');
   }
 

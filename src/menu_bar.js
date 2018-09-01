@@ -1,32 +1,13 @@
-function _getBaseUrl() {
-  const current =
-    import.meta.url;
-  const to = current.lastIndexOf('/');
-  return current.substring(0, to);
-}
-
-function stringReplaceAll(str, find, replace) {
-  find = find.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
-  return str.replace(new RegExp(find, 'g'), replace);
-}
-
-const baseUrl = _getBaseUrl();
-
-const htmlPromise = fetch(`${baseUrl}/template.html`).then((response) => response.text());
+import template from './template.js';
 
 class MenuBar extends HTMLElement {
   constructor() {
     super();
-    this._baseUrl = _getBaseUrl();
     this._shadowDom = this.attachShadow({
       mode: 'closed'
     });
-
-    htmlPromise.then((html) => {
-      html = stringReplaceAll(html, '${base}', this._baseUrl);
-      this._shadowDom.innerHTML = html;
-      this._dropDown = this._shadowDom.querySelector('.dropdown');
-    });
+    this._shadowDom.innerHTML = template;
+    this._dropDown = this._shadowDom.querySelector('.dropdown');
   }
 
   _onClick(item, event) {
@@ -54,7 +35,6 @@ class MenuBar extends HTMLElement {
   }
 
   set config(config) {
-    htmlPromise.then(() => {
       config.items.forEach((item) => {
         const li = document.createElement('li');
         li.addEventListener('click', this._onClick.bind(this, item));
@@ -73,7 +53,6 @@ class MenuBar extends HTMLElement {
           }
         });
       });
-    });
   }
 }
 

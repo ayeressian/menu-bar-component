@@ -12,28 +12,32 @@ class MenuBar extends HTMLElement {
 
   _onClick(item, event) {
     const viewportOffset = event.target.getBoundingClientRect();
-    this._dropDown.style.display = 'inline-block';
-    this._dropDown.style.top = viewportOffset.bottom + 'px';
-    this._dropDown.style.left = viewportOffset.left + 'px';
 
     if (item.items != null) {
+      this._dropDown.style.display = 'inline-block';
+      this._dropDown.style.top = viewportOffset.bottom + 'px';
+      this._dropDown.style.left = viewportOffset.left + 'px';
       this._dropDown.innerHTML = '';
       const ulElem = document.createElement('ul');
       item.items.forEach((innerItem) => {
         const li = document.createElement('li');
         li.innerHTML = innerItem.title;
-        li.addEventListener('click', this._onClickInner.bind(this, innerItem));
+        li.addEventListener('click', () => {
+          this._onItemClick(innerItem);
+          this._dropDown.style.display = 'none';
+        });
         ulElem.appendChild(li);
       });
       this._dropDown.appendChild(ulElem);
+    } else {
+      this._dropDown.style.display = 'none';
     }
   }
 
-  _onClickInner(item, event) {
+  _onItemClick(item, event) {
     this.dispatchEvent(new CustomEvent('select', {
       detail: item.id
     }));
-    this._dropDown.style.display = 'none';
   }
 
   _createItem(item) {
@@ -42,6 +46,8 @@ class MenuBar extends HTMLElement {
     li.innerHTML = item.title;
     const menuBar = this._shadowDom.querySelector('.menu-bar');
     menuBar.appendChild(li);
+
+    li.addEventListener('click', this._onItemClick.bind(this, item));
 
     this._shadowDom.addEventListener('click', (event) => {
       if (event.target.nodeName !== 'LI') {

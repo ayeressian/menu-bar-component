@@ -1,26 +1,12 @@
 import template from './template.js';
 
-function getBaseUrl() {
-  const current =
-    import.meta.url;
-  const to = current.lastIndexOf('/');
-  return current.substring(0, to);
-}
-
-function stringReplaceAll(str, find, replace) {
-  find = find.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
-  return str.replace(new RegExp(find, 'g'), replace);
-}
-
 class MenuBar extends HTMLElement {
   constructor() {
     super();
-    this._baseUrl = getBaseUrl();
     this._shadowDom = this.attachShadow({
       mode: 'closed'
     });
-    const html = stringReplaceAll(template, '$_{base}', this._baseUrl);
-    this._shadowDom.innerHTML = html;
+    this._shadowDom.innerHTML = template;
     this._dropDown = this._shadowDom.querySelector('.dropdown');
   }
 
@@ -44,29 +30,40 @@ class MenuBar extends HTMLElement {
   }
 
   _onClickInner(item, event) {
-    this.dispatchEvent(new CustomEvent('select', { detail: item.id }));
+    this.dispatchEvent(new CustomEvent('select', {
+      detail: item.id
+    }));
     this._dropDown.style.display = 'none';
   }
 
-  set config(config) {
-      config.items.forEach((item) => {
-        const li = document.createElement('li');
-        li.addEventListener('click', this._onClick.bind(this, item));
-        li.innerHTML = item.title;
-        const menuBar = this._shadowDom.querySelector('.menu_bar');
-        menuBar.appendChild(li);
+  _createItem(item) {
+    const li = document.createElement('li');
+    li.addEventListener('click', this._onClick.bind(this, item));
+    li.innerHTML = item.title;
+    const menuBar = this._shadowDom.querySelector('.menu-bar');
+    menuBar.appendChild(li);
 
-        this._shadowDom.addEventListener('click', (event) => {
-          if (event.target.nodeName !== 'LI') {
-            this._dropDown.style.display = 'none';
-          }
-        });
-        document.addEventListener('click', (event) => {
-          if (event.target !== this) {
-            this._dropDown.style.display = 'none';
-          }
-        });
+    this._shadowDom.addEventListener('click', (event) => {
+      if (event.target.nodeName !== 'LI') {
+        this._dropDown.style.display = 'none';
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target !== this) {
+        this._dropDown.style.display = 'none';
+      }
+    });
+    return li;
+  }
+
+  set config(config) {
+    config.items.forEach(this._createItem.bind(this));
+    if (config.rightItems) {
+      config.rightItems.forEach((rightItem) => {
+        const li = this._createItem(rightItem);
+        li.classList.add('right-menu-item');
       });
+    }
   }
 }
 

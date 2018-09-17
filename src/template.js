@@ -1,8 +1,11 @@
+import style from './style.js';
 export default /* html */ `
 <link rel="stylesheet" type="text/css" href="/node_modules/normalize.css/normalize.css">
-<link rel="stylesheet" type="text/css" href="$_{base}/style.css">
+<style>
+  ${style}
+</style>
 
-<ul class="menu_bar">
+<ul class="menu-bar">
 </ul>
 
 <div class="dropdown">

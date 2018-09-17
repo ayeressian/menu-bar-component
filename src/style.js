@@ -1,9 +1,10 @@
+export default /* css*/ `
 * {
     font-family: Arial, Helvetica, sans-serif;
     cursor: default;
 }
 
-.menu_bar {    
+.menu-bar {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -11,13 +12,17 @@
     background-color: #d9d9d9;
 }
 
-.menu_bar > li {
+.menu-bar > li {
     float: left;
     display: block;
     color: black;
     text-align: center;
     padding: 7px 8px;
     text-decoration: none;
+}
+
+.menu-bar > li.right-menu-item {
+  float: right
 }
 
 li:hover {
@@ -29,9 +34,9 @@ li:hover {
     top: 50px;
     left: 0;
     display: none;
-    background-color: #cfcfcf;    
+    background-color: #cfcfcf;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;    
+    z-index: 1;
     min-width: 160px;
     padding: 0;
 }
@@ -42,7 +47,7 @@ li:hover {
 }
 
 .dropdown li {
-    list-style-type: none;    
+    list-style-type: none;
     height: 2em;
     line-height: 2em;
     padding-left: 20px;
@@ -51,4 +56,4 @@ li:hover {
 
 .dropdown li:last-child {
     border-bottom: 0;
-}
+}`;

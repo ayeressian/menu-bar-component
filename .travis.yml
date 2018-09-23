@@ -1,6 +1,0 @@
-language: node_js
-node_js:
-  - stable
-script:
-  - echo "npm test temporarily disabled"
-  - npm run build-prod

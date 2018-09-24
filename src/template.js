@@ -1,11 +1,9 @@
-import style from './style.js';
-export default /* html */ `
+import css from './style.css';
+import template from './template.html';
+
+export default `
 <style>
-  ${style}
+  ${css}
 </style>
-
-<ul class="menu-bar">
-</ul>
-
-<div class="dropdown">
-</div>`;
+${template}
+`;

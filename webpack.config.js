@@ -6,10 +6,12 @@ module.exports = {
   devtool: 'source-map',
   devServer: {
     contentBase: './',
-    port: 9997,
+    port: 9998,
     historyApiFallback: {
       index: './example/index.html'
-    }
+    },
+    publicPath: '/dist',
+    watchContentBase: true
   },
   entry: './src/menu_bar.js',
   output: {
